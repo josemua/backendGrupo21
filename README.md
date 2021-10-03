@@ -5,6 +5,7 @@ Grupo Integrado por:
 Juan Jose Ávila Sanchez;
 Adriana Katherine velosa Ramirez;
 Elkin David Tordecilla Avila;
+Jose Fernando Muñoz Alvarez; - Sidebar - OAuth 2
 
 
 Panel principal

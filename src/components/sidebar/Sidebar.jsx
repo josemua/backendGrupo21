@@ -1,50 +1,93 @@
-import "./sidebar.css";
-import { MdLineStyle } from "react-icons/md";
-import { IoAnalyticsSharp } from "react-icons/io5";
-import { AiOutlineUser} from "react-icons/ai";
-import { RiDashboardLine } from "react-icons/ri";
-import { MdAttachMoney } from "react-icons/md";
-import { HiOutlineDocument } from "react-icons/hi";
+import React, {useEffect, useState} from "react";
+import styled from 'styled-components'
+import SidebarItems from "./SidebarItems";
+import {Link} from "react-router-dom";
 
+function Sidebar(props, {defaultActive,}) {
+    const location = props.history.location;
+    const lastActiveIndexString = localStorage.getItem("lastActiveIndex");
+    const lastActiveIndex = Number(lastActiveIndexString);
+    const [activeIndex, setActiveIndex] = useState(lastActiveIndex || defaultActive);
 
+    function changeActiveIndex(newIndex) {
+        localStorage.setItem("lastActiveIndex", newIndex)
+        setActiveIndex(newIndex)
+    }
 
+    function getPath(path) {
+        if (path.charAt(0) !== "/") {
+            return  "/" + path;
+        }
+        return path;
+    }
 
+    useEffect(()=> {
+        const activeItem = SidebarItems.findIndex(item=> getPath(item.route) === getPath(location.pathname))
+        changeActiveIndex(activeItem);
+    }, [location])
 
-export default function Sidebar() {
-  return (
-    <div className="sidebar">
-      <div className="sidebarWrapper">
-        <div className="sidebarMenu">
-          <h3 className="sidebarTitle">Panel</h3>
-          <ul className="sidebarList">
-            <li className="sidebarListItem active"></li>
-            <MdLineStyle className="sidebarIcon" />
-            Inicio
-            <li className="sidebarListItem"></li>
-            <IoAnalyticsSharp className="sidebarIcon" />
-            Estadísticas
-            
-          </ul>
-        </div>
-        <div className="sidebarMenu">
-          <h3 className="sidebarTitle">Menú rapido</h3>
-          <ul className="sidebarList">
-            <li className="sidebarListItem"></li>
-            <AiOutlineUser className="sidebarIcon" />
-            Usuarios
-            <li className="sidebarListItem"></li>
-            <RiDashboardLine className="sidebarIcon"  />
-            Productos
-            <li className="sidebarListItem"></li>
-            <MdAttachMoney />
-            Ventas
-            <li className="sidebarListItem"></li>
-            <HiOutlineDocument className="sidebarIcon" />
-            Reportes
-          </ul>
-        </div>
-        
-              </div>
-    </div>
-  );
+    return (
+        <>
+            <SidebarParent>
+                <div style={{position: 'fixed'}}>
+                    {
+                        SidebarItems.map((item, index)=> {
+                            return (
+                                <Link to={item.route}>
+                                    <SidebarItem key={item.name}
+                                                 active={index === activeIndex}
+                                    >
+                                        <p>{item.name}</p>
+                                    </SidebarItem>
+                                </Link>
+                            );
+                        })
+                    }
+
+                </div>
+                <div className="behind-the-scenes"/>
+            </SidebarParent>
+        </>
+    );
 }
+
+export default Sidebar;
+
+const SidebarParent = styled.div`
+  background: #154360;
+  
+  a {
+    text-decoration: none;
+  }
+  
+  & > div {
+    width: 250px;
+    height: 100vh;
+  }
+  
+  .behind-the-scenes {
+    width: 250px;
+    
+  }
+`;
+
+const SidebarItem = styled.div`
+  padding: 16px 24px;
+  transition: all 0.25s ease-in-out;
+  background: ${props => props.active ? "#b15b00" : ""};
+  margin: 4px 12px;
+  border-radius: 4px;
+  p {
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  
+  &:hover {
+    cursor:pointer;
+  }
+  
+  &:hover:not(:first-child) {
+    background: #5499C7;
+  }
+`;
