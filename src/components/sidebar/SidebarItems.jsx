@@ -12,7 +12,11 @@ const SidebarItems = [
         route: "/user/:userId"
     },
     {
-        name: "Productos",
+        name: "Nuevo Usuario",
+        route: "/newUser"
+    },
+    {
+        name: "Producto",
         route: "/newproduct"
     },
     {
@@ -22,10 +26,6 @@ const SidebarItems = [
     {
         name: "Reportes",
         route: "/product/:productId"
-    },
-    {
-        name: "Nuevo",
-        route: "/newproduct"
     },
 ];
 
