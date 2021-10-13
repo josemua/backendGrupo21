@@ -5,7 +5,7 @@ Jose Fernando Muñoz Alvarez;
 
 
 Para instalar las dependencias usamos npm install, 
-Para empezar el servidor usamos npm start,
+Para empezar el servidor usamos npm start (es necesario tener nodemon instalado como dependencia global o instalarlo usando: npm install nodemon -g),
 usando postman podemos probar los métodos y las rutas usando los modelos:
 http://localhost:3000/api/auth/register - post - Registrar un usuario (requiere: username, email y password - opcionales: isAdmin, status)
 http://localhost:3000/api/auth/login - Post - autenticar un usuario (requiere username y password de un ususario ya registrado) - Si no tienes acceso a la base de datos de Mongodb, Postman dará un user_id y un token) - necesitas el token para autenticarte y poder realizar las funciones de la página. En headers, usar llave token y como value usar la siguiente formula: Bearer token - (importante el espacio despues del Bearer)
