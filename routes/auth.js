@@ -6,7 +6,6 @@ const jwt = require("jsonwebtoken");
 //REGISTER
 router.post("/register", async (req, res) => {
   const newUser = new User({
-    username: req.body.username,
     email: req.body.email,
     password: CryptoJS.AES.encrypt(
       req.body.password,
@@ -25,7 +24,7 @@ router.post("/register", async (req, res) => {
 //LOGIN
 router.post("/login", async (req, res) => {
   try {
-    const user = await User.findOne({ username: req.body.username });
+    const user = await User.findOne({ email: req.body.email });
     !user && res.status(401).json("Credenciales incorrectas!");
 
     const hashedPassword = CryptoJS.AES.decrypt(
@@ -42,7 +41,7 @@ router.post("/login", async (req, res) => {
         isAdmin: user.isAdmin,
       },
       process.env.JWT_SEC,
-      { expiresIn: "3d" }
+      { expiresIn: "1d" }
     );
 
     const { password, ...others } = user._doc;

@@ -65,29 +65,37 @@ router.get("/", verifyTokenAndAdmin, async (req, res) => {
 
 //GET MONTHLY INCOME
 
-router.get("/income", verifyTokenAndAdmin, async(req, res)=>{
-    const date = new Date();
-  const thisMonth = new Date(date.setMonth(date.getMonth() -1));
-  const lastMonth = new Date(new Date().setMonth(thisMonth.getMonth() -1));
+router.get("/income", verifyTokenAndAdmin, async (req, res) => {
+  const productId = req.query.pid;
+  const date = new Date();
+  const thisMonth = new Date(date.setMonth(date.getMonth() - 1));
+  const lastMonth = new Date(new Date().setMonth(thisMonth.getMonth() - 1));
 
-  try{
+  try {
     const income = await Order.aggregate([
-    { $match: {createdAt: {$gte: lastMonth}}},
-    {
-      $project: {
-        month: {$month: "$createdAt"},
-        sales: "$amount",
+      {
+        $match: {
+          createdAt: { $gte: lastMonth },
+          ...(productId && {
+            products: { $elemMatch: { productId } },
+          }),
+        },
       },
-    },
-    {
-      $group:{
-        _id: "$month",
-        total: {$sum: "$sales"},
+      {
+        $project: {
+          month: { $month: "$createdAt" },
+          sales: "$amount",
+        },
       },
-    },
-  ]);
-  res.status(200).json(income);
-  } catch(err){
+      {
+        $group: {
+          _id: "$month",
+          total: { $sum: "$sales" },
+        },
+      },
+    ]);
+    res.status(200).json(income);
+  } catch (err) {
     res.status(500).json(err);
   }
 });
