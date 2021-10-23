@@ -9,12 +9,10 @@ const UserSchema = new mongoose.Schema(
             default: false,
         },
         status: {type: String, default: "pendiente"},
+        username:{type: String},
+        img: {type: String}
     },
     { timestamps : true },
-    {
-        username:{type: String},
-        img: {type: String},
-}
 );
 
 module.exports = mongoose.model("User", UserSchema);
